@@ -1,14 +1,11 @@
 <template>
   <div id="app">
     <div class="container-sm p-3">
-      <customer-form @addcus="addCustomer" />
-      <hr />
-      <h2>Customers List</h2>
-      <hr />
+      <customer-form @addstu="addStudent" />
       <customer-table 
-        :customers="this.customers"
-        @editcus="editCustomer"
-        @delcus="delCustomer"
+        :students="this.students"
+        @editstu="editStudent"
+        @delstu="delStudent"
          />
     </div>
   </div>
@@ -26,64 +23,65 @@ export default {
   },
   data() {
     return {
-      customers: []
+      students: []
     };
   },
   methods: {
-    async addCustomer(customer) {
+    async addStudent(student) {
       try {
-        const response = await fetch("http://192.168.1.125:9000/cus",
+        const response = await fetch("http://localhost:8080/v1/student/register",
           {
             method: "POST",
-            body: JSON.stringify(customer),
-            headers: { "Content-type": "application/json; charset=UTF-8" }
+            // how to xml 
+            body: JSON.stringify(student),
+            headers: { "Content-type": "application/xml; charset=UTF-8" }
           }
         );
         const data = await response.json();
-        this.customers = [...this.customers, data];
+        this.students = [...this.students, data];
       } catch (error) {
         console.error(error);
       }
     },
-    async delCustomer(id) {
+    async delStudent(id) {
       try {
-        await fetch("http://localhost:9000/cus/" + id, 
+        await fetch("http://localhost:8080/v1/student/student-user/" + id, 
         {
           method: "DELETE"
         });
-        this.customers = this.customers.filter(customer => customer.id !== id);
+        this.students = this.students.filter(student => student.id !== id);
       } catch (error) {
         console.error(error);
       }
     },
-    async editCustomer(id, newcus) {
+    async editStudent(id, newcus) {
       try {
-        const response = await fetch("http://localhost:9000/cus/" + id, 
+        const response = await fetch("http://localhost:8080/v1/student/" + id, 
         {
           method: "PUT",
           body: JSON.stringify(newcus),
-          headers: { "Content-type": "application/json; charset=UTF-8" }
+          headers: { "Content-type": "application/xml; charset=UTF-8" }
         });
         const dat = await response.json();
-        this.customers = this.customers.map(customer =>
-          customer.id === id ? dat : customer
+        this.students = this.students.map(student =>
+          student.id === id ? dat : student
         );
       } catch (error) {
         console.error(error);
       }
     },
-    async getCustomers() {
+    async getStudents() {
       try {
-        const response = await fetch("http://localhost:9000/cus");
+        const response = await fetch("http://localhost:8080/v1/student/");
         const cusdata = await response.json();
-        this.customers = cusdata;
+        this.students = cusdata;
       } catch (error) {
         console.error(error);
       }
     },
   },
   mounted() {
-    this.getCustomers();
+    this.getStudents();
   }
 };
 </script>

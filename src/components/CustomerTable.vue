@@ -3,40 +3,77 @@
     <table class="table table-striped">
       <thead>
         <tr>
-          <th>Customer Name</th>
-          <th>Customer Tel</th>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Surname</th>
+          <th>Address</th>
           <th>Action</th>
         </tr>
       </thead>
+
       <tbody>
-        <tr v-for="cus of customers" :key="cus.id">
-          <td v-if="editmode === cus.id">
-            <input type="text" class="form-control" v-model="cus.cusname" />
+        <tr v-for="stu of students" :key="stu.id">
+
+          <!-- ID -->
+          <td v-if="editmode === stu.id">
+            <input type="text" class="form-control" v-model="stu.id" />
           </td>
-          <td v-else>{{cus.cusname}}</td>
-          <td v-if="editmode === cus.id">
-            <input type="text" class="form-control" v-model="cus.custel" />
+          <td v-else>{{stu.id}}</td>
+
+          <!-- Name -->
+          <td v-if="editmode === stu.id">
+            <input type="text" class="form-control" v-model="stu.name" />
           </td>
-          <td v-else>{{cus.custel}}</td>
-          <td class="text-right" v-if="editmode === cus.id">
-            <button class="btn btn-success" @click="editcus(cus)">Save</button>&nbsp;
-            <button class="btn btn-secondary" @click="chmode(cus, null)">Cancel</button>
+          <td v-else>{{stu.name}}</td>
+
+          <!-- Surname -->
+          <td v-if="editmode === stu.id">
+            <input type="text" class="form-control" v-model="stu.surname" />
           </td>
+          <td v-else>{{stu.surname}}</td>
+
+          <!-- Address -->
+          <td v-if="editmode === stu.id">
+            <input type="text" class="form-control" v-model="stu.address1" />
+            <input type="text" class="form-control" v-model="stu.district" />
+            <input type="text" class="form-control" v-model="stu.province" />
+            <input type="text" class="form-control" v-model="stu.postalCode" />
+          </td>
+          <td v-else>{{stu.address1}} {{stu.district}} {{stu.province}} {{stu.postalCode}}</td>
+          
+          <!-- Action -->
+          <td class="text-right" v-if="editmode === stu.id">
+            <button class="btn btn-success" @click="editstu(stu)">Save</button>&nbsp;
+            <button class="btn btn-secondary" @click="chmode(stu, null)">Cancel</button>
+          </td>
+
           <td class="text-right" v-else>
-            <button class="btn btn-warning" @click="chmode(cus, cus.id)">Edit</button>&nbsp;
-            <button class="btn btn-danger" @click="del(cus.id)">Delete</button>
+            <button class="btn btn-warning" @click="chmode(stu, stu.id)">Edit</button>&nbsp;
+            <button class="btn btn-danger" @click="del(stu.id)">Delete</button>
           </td>
+
         </tr>
       </tbody>
     </table>
   </div>
+
+  <div>
+    <b-container class="bv-example-row bv-example-row-flex-cols">
+      <b-row class="text-right">
+        <b-col align-self="end">
+          <button class="btn btn-warning" @click="chmode(stu, stu.id)">Add New</button>&nbsp;
+        </b-col>
+      </b-row>
+    </b-container>
+  </div>
+  
 </template>
 
 <script>
 export default {
-  name: "CustomerTable",
+  name: "StudentTable",
   props: {
-    customers: Array
+    students: Array
   },
   data() {
     return {
@@ -44,30 +81,30 @@ export default {
     }
   },
   methods: {
-    chmode(cus, id) {
+    chmode(stu, id) {
       if (id != null) {
         if (id != this.editmode && this.editmode !== null) {
-          let found = this.customers.find(cm => cm.id === this.editmode);
+          let found = this.students.find(cm => cm.id === this.editmode);
           Object.assign(found, this.customer);
         }
-        this.editmode = cus.id;
-        this.customer = Object.assign({}, cus)
+        this.editmode = stu.id;
+        this.customer = Object.assign({}, stu)
       } else {
         this.editmode = null;
-        Object.assign(cus, this.customer)
+        Object.assign(stu, this.customer)
 
       }
     },
-    editcus(cus) {
-      if (cus.cusname === "" || cus.custel === "") {
+    editstu(stu) {
+      if (stu.id === "" ||stu.name === "" || stu.surname === "" || stu.address1 === "" || stu.district === "" || stu.province === "" || stu.postalCode === "") {
         alert("All fields are required!");
         return;
       }
-      this.$emit("editcus", cus.id, cus);
+      this.$emit("editstu", stu.id, stu);
       this.editmode = null;
     }, 
     del(id) {
-      this.$emit("delcus", id);
+      this.$emit("delstu", id);
     }
   }
 };

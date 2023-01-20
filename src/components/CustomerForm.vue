@@ -1,15 +1,22 @@
 <template>
   <div class="text-left">
-    <form @submit.prevent="cussubmit">
+    <form @submit.prevent="stusubmit">
       <div class="form-group">
-        <label>Customer Name :</label>
-        <input type="text" class="form-control" v-model="customer.cusname" required />
+        <label>ID:</label>
+        <input type="text" class="form-control" v-model="student.id" required />
       </div>
+
       <div class="form-group">
-        <label>Customer tel :</label>
-        <input type="text" class="form-control" v-model="customer.custel" required />
+        <label>Name and Surname:</label>
+        <input type="text" class="form-control" v-model="student.name" required />
       </div>
-      <button type="submit" class="btn btn-primary">Add Customer</button>
+
+      <div class="form-group">
+        <label>Address:</label>
+        <input type="text" class="form-control" v-model="student.address1" required />
+      </div>
+
+      <button type="submit" class="btn btn-primary">SAVE</button>
     </form>
   </div>
 </template>
@@ -19,17 +26,19 @@ export default {
   name: "CustomerForm",
   data() {
     return {
-      customer: {
-        cusname: "",
-        custel: ""
+      student: {
+        id: "",
+        name: "",
+        address1: ""
       }
     };
   },
   methods: {
-    cussubmit() {
-      this.$emit("addcus", this.customer);
-      this.customer.cusname = "";
-      this.customer.custel = "";
+    stusubmit() {
+      this.$emit("addstu", this.customer);
+      this.student.id = "";
+      this.student.name = "";
+      this.student.address1 = "";
     }
   }
 };
